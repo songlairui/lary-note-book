@@ -15,4 +15,12 @@ nest new back
 yarn add prisma-binding
 
 prisma init
+
+docker-compose up -d
+
+prisma deploy
+
+graphql get-schema --project database
+graphql codegen --project database
+
 ```
