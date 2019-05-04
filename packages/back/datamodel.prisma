@@ -1,0 +1,43 @@
+type User {
+  id: ID! @id
+  name: String!
+  pwd: String!
+  email: String! @unique
+  profile: Profile!
+    @relation(name: "UserProfile", link: INLINE, onDelete: CASCADE)
+  notes: [Note!]! @relation(name: "NoteAuthor", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt  
+}
+
+type Profile {
+  id: ID! @id
+  user: User! @relation(name: "UserProfile")
+  wechat: String
+  qq: String
+  weibo: String
+  zhihu: String
+  github: String
+  facebook: String
+  linkin: String
+  google: String
+  juejin: String
+  avatar: String
+}
+
+type Note {
+  id: ID! @id
+  title: String
+  content: String!
+  theme: String
+  author: User! @relation(name: "NoteAuthor", link: INLINE)
+  categories: [Category!]! @relation(name: "NoteInCate", link: TABLE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Category {
+  id: ID! @id
+  name: String
+  notes: [Note!]! @relation(name: "NoteInCate")
+}
