@@ -4,8 +4,10 @@ import router from './router'
 import store from './store'
 import { createProvider } from './vue-apollo'
 import VueRx from 'vue-rx';
+import AntVue from './plugins/ant-design-vue.js'
 
 Vue.use(VueRx);
+Vue.use(AntVue);
 
 Vue.config.productionTip = false
 
