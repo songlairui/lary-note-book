@@ -1,6 +1,10 @@
 <template>
   <div class="note-list">
-    <ApolloQuery :query="require('../graphql/my-notes.gql')" :variables="{ first, skip }">
+    <ApolloQuery
+      :query="require('../graphql/my-notes.gql')"
+      :variables="{ first, skip }"
+      @result="handleResult"
+    >
       <template slot-scope="{ result: { loading, error, data } }">
         <!-- Loading -->
         <div v-if="loading" class="loading apollo">Loading...</div>
@@ -21,6 +25,7 @@
         <div v-else class="no-result apollo">No result :(</div>
       </template>
     </ApolloQuery>
+    <a-pagination v-model="pageNumber"/>
   </div>
 </template>
 
@@ -31,8 +36,31 @@ export default {
     return {
       noteList: [],
       first: 5,
-      skip: 0
+      skip: 0,
+      pageTotal: 0
     };
+  },
+  computed: {
+    pageNumber: {
+      get() {
+        return Math.floor(this.skip / this.first) + 1;
+      },
+      set(val) {
+        this.skip = this.first * (val - 1);
+      }
+    }
+  },
+  methods: {
+    handleResult(resultObj) {
+      const {
+        data: {
+          notesConnection: {
+            aggregate: { count }
+          }
+        }
+      } = resultObj;
+      this.pageTotal = count;
+    }
   }
 };
 </script>

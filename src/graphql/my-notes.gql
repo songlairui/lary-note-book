@@ -27,4 +27,9 @@ query MyNotes(
     createdAt
     updatedAt
   }
+  notesConnection(where: $where) {
+    aggregate {
+      count
+    }
+  }
 }
