@@ -8,13 +8,14 @@
         <router-link to="/note-list">NoteList</router-link>
       </div>
       <router-view></router-view>
+      <float-actions/>
     </div>
   </a-locale-provider>
 </template>
 
 <script>
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
-import HelloWorld from "./components/HelloWorld.vue";
+import FloatActions from "./floating/Actions";
 
 export default {
   name: "app",
@@ -24,10 +25,19 @@ export default {
     };
   },
   components: {
-    HelloWorld
+    FloatActions
+  },
+  methods: {
+    openModal() {},
+    addNote() {}
   }
 };
 </script>
 
 <style>
+.float-actions {
+  position: fixed;
+  right: 2em;
+  bottom: 2em;
+}
 </style>
