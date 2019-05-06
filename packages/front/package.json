@@ -10,6 +10,7 @@
     "apollo:run": "vue-cli-service apollo:run"
   },
   "dependencies": {
+    "ant-design-vue": "^1.2.4",
     "core-js": "^2.6.5",
     "graphql-type-json": "^0.2.1",
     "lowdb": "^1.0.0",
@@ -27,12 +28,14 @@
     "@vue/cli-plugin-eslint": "^3.7.0",
     "@vue/cli-service": "^3.7.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-import": "^1.11.0",
     "eslint": "^5.16.0",
     "eslint-plugin-graphql": "^2.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "graphql-tag": "^2.9.0",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
+    "vue-cli-plugin-antdesignvue": "^1.0.0",
     "vue-cli-plugin-apollo": "^0.20.0",
     "vue-cli-plugin-rx": "^0.1.5",
     "vue-template-compiler": "^2.5.21"
