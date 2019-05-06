@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "apollo": "vue-cli-service apollo:watch",
-    "apollo:run": "vue-cli-service apollo:run"
+    "apollo:run": "vue-cli-service apollo:run",
+    "get:schema": "graphql get-schema --project app"
   },
   "dependencies": {
     "ant-design-vue": "^1.2.4",
