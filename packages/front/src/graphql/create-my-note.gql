@@ -1,0 +1,13 @@
+mutation CreateMyNote($data: NoteCreateWithoutAuthorInput!) {
+  createNoteAuto(data: $data) {
+    id
+    title
+    content
+    theme
+    author {
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}

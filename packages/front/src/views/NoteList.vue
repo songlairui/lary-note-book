@@ -51,14 +51,21 @@ export default {
     }
   },
   methods: {
-    handleResult(resultObj) {
-      const {
-        data: {
-          notesConnection: {
-            aggregate: { count }
+    handleResult({ data, error }) {
+      if (error) {
+        const { error: msg, statusCode } = error.gqlError.message;
+        this.$message.error(msg).then(() => {
+          if (statusCode > 400) {
+            this.$router.push("/login");
           }
+        });
+        return;
+      }
+      const {
+        notesConnection: {
+          aggregate: { count }
         }
-      } = resultObj;
+      } = data;
       this.pageTotal = count;
     }
   }
