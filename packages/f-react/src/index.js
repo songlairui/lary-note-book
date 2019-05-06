@@ -14,8 +14,12 @@ import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
+const host = process.env.REACT_APP_PRISMA_SERV
+
+console.warn('host', host)
+
 const httpLink = createHttpLink({
-  uri: 'http://133.130.106.114:3333/graphql'
+  uri: `http://${host}/graphql`
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -29,7 +33,7 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const wsLink = new WebSocketLink({
-  uri: `ws://133.130.106.114:3333`,
+  uri: `ws://${host}/graphql`,
   options: {
     reconnect: false,
     connectionParams: {
