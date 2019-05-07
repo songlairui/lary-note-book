@@ -7,7 +7,12 @@ query MyNotes(
   $before: String
   $orderBy: NoteOrderByInput
 ) {
-  notes(
+  notesStatistics: notesConnection(where: $where) {
+    aggregate {
+      count
+    }
+  }
+  notesConnection(
     where: $where
     first: $first
     last: $last
@@ -16,18 +21,28 @@ query MyNotes(
     before: $before
     orderBy: $orderBy
   ) {
-    id
-    title
-    content
-    theme
-    author {
-      email
-      name
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
     }
-    createdAt
-    updatedAt
-  }
-  notesConnection(where: $where) {
+    edges {
+      cursor
+      node {
+        id
+        title
+        content
+        theme
+        author {
+          id
+          email
+          name
+        }
+        createdAt
+        updatedAt
+      }
+    }
     aggregate {
       count
     }
