@@ -66,7 +66,7 @@ export default {
         update: (store, { data: { createNoteAuto } }) => {
           const variables = {
             first: 5,
-            skip: 0
+            after: null
           };
           const data = store.readQuery({
             query: MY_NOTES,

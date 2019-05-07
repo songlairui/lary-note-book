@@ -5,6 +5,8 @@ mutation CreateMyNote($data: NoteCreateWithoutAuthorInput!) {
     content
     theme
     author {
+      id
+      email
       name
     }
     createdAt
