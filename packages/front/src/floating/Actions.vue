@@ -30,7 +30,8 @@
 </template>
 
 <script>
-const CREATE_MY_NOTE = require("../graphql/create-my-note.gql");
+import CREATE_MY_NOTE from "../graphql/create-my-note.gql";
+import MY_NOTES from "../graphql/my-notes.gql";
 
 export default {
   name: "Actions",
@@ -60,11 +61,37 @@ export default {
             theme: this.theme,
             content: this.content
           }
+        },
+        update: (store, { data: { createNoteAuto } }) => {
+          const variables = {
+            first: 5,
+            skip: 0
+          };
+          const data = store.readQuery({
+            query: MY_NOTES,
+            variables
+          });
+          console.info("this", data, createNoteAuto);
+          if (!data || !data.notesConnection) {
+            return;
+          }
+          data.notesConnection.edges.push({
+            cursor: createNoteAuto.id,
+            node: createNoteAuto,
+            __typename: `${createNoteAuto.__typename}Edge`
+          });
+          data.notesStatistics.aggregate.count += 1;
+          store.writeQuery({
+            query: MY_NOTES,
+            variables,
+            data
+          });
         }
       });
       console.info("res", res);
       this.content = "";
       this.title = "";
+      this.showModal = false;
     },
     noteCreated(resultObj) {
       console.info("resultObj", resultObj, this);
