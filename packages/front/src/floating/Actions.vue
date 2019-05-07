@@ -63,9 +63,11 @@ export default {
         }
       });
       console.info("res", res);
+      this.content = "";
+      this.title = "";
     },
     noteCreated(resultObj) {
-      console.info("resultObj", resultObj);
+      console.info("resultObj", resultObj, this);
       this.content = "";
       this.title = "";
     },
@@ -77,9 +79,4 @@ export default {
 </script>
 
 <style>
-/* 无奇不有
-
-我已经因为一个 true/false 耗费了一天时间调整 vux
-
-现在我又因为没有看清 ! 数量,造成为出发预期动作 */
 </style>
