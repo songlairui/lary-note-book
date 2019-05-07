@@ -51,6 +51,7 @@ export default {
   methods: {
     async createNote() {
       if (!this.formValid) {
+        this.$message.error("form not Valid!");
         return;
       }
       const res = await this.$apollo.mutate({
@@ -71,8 +72,11 @@ export default {
             query: MY_NOTES,
             variables
           });
-          console.info("this", data, createNoteAuto);
           if (!data || !data.notesConnection) {
+            return;
+          }
+          if (data.notesConnection.pageInfo.hasNextPage) {
+            // 如果还有下一页, 则不需要添加到缓存
             return;
           }
           data.notesConnection.edges.push({
@@ -88,18 +92,9 @@ export default {
           });
         }
       });
-      console.info("res", res);
       this.content = "";
       this.title = "";
       this.showModal = false;
-    },
-    noteCreated(resultObj) {
-      console.info("resultObj", resultObj, this);
-      this.content = "";
-      this.title = "";
-    },
-    handleErr(errObj) {
-      this.$message.error(errObj);
     }
   }
 };
