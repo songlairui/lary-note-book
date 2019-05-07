@@ -6,7 +6,10 @@
       </div>
     </div>
     <div class="actions">
-      <button v-if="source.hasNextPage" @click="showMore">Show more</button>
+      <button
+        v-if="source.hasNextPage"
+        @click="showMore"
+      >{{ source.total }} Show more {{ source.endCursor }}</button>
     </div>
   </div>
 </template>
@@ -16,7 +19,7 @@ import MY_NOTES from "../graphql/my-notes.gql";
 
 const initVari = {
   first: 5,
-  skip: 0
+  after: null
 };
 
 export default {
@@ -24,7 +27,8 @@ export default {
   data() {
     return {
       first: 5,
-      skip: 0
+      skip: 0,
+      after: null
     };
   },
   apollo: {
@@ -41,7 +45,7 @@ export default {
     variables() {
       return {
         first: this.first,
-        skip: this.skip
+        after: this.after
       };
     },
     source() {
@@ -50,12 +54,20 @@ export default {
         return {
           total: 0,
           hasNextPage: false,
-          edges: []
+          edges: [],
+          startCursor: null,
+          endCursor: null
         };
+      const {
+        edges,
+        pageInfo: { hasNextPage, startCursor, endCursor }
+      } = notesConnection;
       return {
         total: notesStatistics.aggregate.count,
-        hasNextPage: notesConnection.pageInfo.hasNextPage,
-        edges: notesConnection.edges
+        edges,
+        hasNextPage,
+        startCursor,
+        endCursor
       };
     }
   },
@@ -87,15 +99,17 @@ export default {
       this.showMoreEnabled = pageInfo.hasNextPage;
     },
     showMore() {
-      this.skip += this.first;
-      this.$apollo.queries.notesConnection.fetchMore({
-        variables: this.variables,
-        updateQuery: (prevResult, { fetchMoreResult }) => {
-          fetchMoreResult.notesConnection.edges.unshift(
-            ...prevResult.notesConnection.edges
-          );
-          return fetchMoreResult;
-        }
+      this.after = this.source.endCursor;
+      this.$nextTick(() => {
+        this.$apollo.queries.notesConnection.fetchMore({
+          variables: this.variables,
+          updateQuery: (prevResult, { fetchMoreResult }) => {
+            fetchMoreResult.notesConnection.edges.unshift(
+              ...prevResult.notesConnection.edges
+            );
+            return fetchMoreResult;
+          }
+        });
       });
     }
   },
