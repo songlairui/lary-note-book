@@ -1,0 +1,5 @@
+# safelist
+branches:
+  only:
+  - lary-note-back
+  - lary-note-web
