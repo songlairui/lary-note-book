@@ -1,5 +1,5 @@
 # lary-note-front
 
-> lary-note 前端, via @vue/cli
+[![Build Status](https://travis-ci.org/songlairui/lary-note-book.svg?branch=lary-note-web)](https://travis-ci.org/songlairui/lary-note-book)
 
-添加 travis
+> lary-note 前端, via @vue/cli
