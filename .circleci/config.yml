@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    docker: # use the docker executor type; machine and macos executors are also supported
+      - image: circleci/node:10.15.3 # the primary container, where your job's commands are run
+    environment:
+      VUE_APP_GRAPHQL_HTTP: https://note.songlairui.cn/graphql
+      VUE_APP_GRAPHQL_WS: wss://note.songlairui.cn/graphql
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/lary-note/fe
+      - restore_cache:
+          key: v1-yarn-{{ checksum "yarn.lock" }}
+      - run: yarn
+      - save_cache:
+          key: v1-yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+      - run: yarn build
+      - persist_to_workspace:
+          root: .
+          paths: dist
