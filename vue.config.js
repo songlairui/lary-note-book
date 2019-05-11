@@ -2,7 +2,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 
 module.exports = {
   lintOnSave: false,
-
+  productionSourceMap: false,
   pluginOptions: {
     apollo: {
       enableMocks: false,
@@ -22,6 +22,7 @@ module.exports = {
       }
     }
   },
+
   chainWebpack: (config) => {
     console.group()
     console.info('\nVUE_APP_GRAPHQL_HTTP:', process.env.VUE_APP_GRAPHQL_HTTP)
@@ -70,5 +71,10 @@ module.exports = {
         .tap(() => {})
     }
     console.groupEnd()
+  },
+
+  pwa: {
+    name: 'Lary\'s Note',
+    themeColor: '#000000'
   }
 }

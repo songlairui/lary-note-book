@@ -6,6 +6,7 @@ import VueRx from 'vue-rx'
 import AntVue from './plugins/ant-design-vue.js'
 import apolloProvider from './plugins/apollo-client'
 import LoginState from './mixins/login-state'
+import './registerServiceWorker'
 import './main.less'
 
 Vue.use(VueRx)
