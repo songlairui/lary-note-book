@@ -1,18 +1,26 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img @click="$router.push({name:'noteList'})" class="entry" src="@/assets/dribble_book_4x.png">
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+  name: "home"
+};
 </script>
+<style lang="less" scoped>
+.home {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.entry {
+  max-width: 50vh;
+  cursor: pointer;
+}
+</style>
+
