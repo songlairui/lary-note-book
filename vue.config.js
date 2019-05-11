@@ -26,9 +26,8 @@ module.exports = {
     console.group()
     console.info('\nVUE_APP_GRAPHQL_HTTP:', process.env.VUE_APP_GRAPHQL_HTTP)
     var externals = {
-      vue: 'Vue',
-      axios: 'axios',
       'vue-router': 'VueRouter',
+      vue: 'Vue',
       vuex: 'Vuex',
       moment: 'moment'
     }
@@ -45,7 +44,6 @@ module.exports = {
         // vuex
         '//cdn.jsdelivr.net/npm/vuex',
         // axios
-        '//cdn.jsdelivr.net/npm/axios',
         '//cdn.jsdelivr.net/npm/moment'
       ]
     }
