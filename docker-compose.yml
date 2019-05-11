@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - '5555:5555'
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/logs:/var/log/nginx
+      - ./dist:/www
+
+networks:
+  default:
+    external:
+      name: multi-compose

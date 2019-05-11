@@ -1,0 +1,9 @@
+subscription NewNote {
+  note {
+    mutation
+    node {
+      id
+      content
+    }
+  }
+}
