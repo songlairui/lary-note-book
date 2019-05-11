@@ -24,6 +24,8 @@
           <a-button type="primary" @click="createNote">Add</a-button>
         </a-row>
       </a-modal>
+      <a-icon type="dash" :spin="listening.note"/>
+      <a-divider type="vertical"/>
       <a-button
         v-if="isLogin"
         type="primary"
@@ -43,6 +45,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import CREATE_MY_NOTE from "../graphql/create-my-note.gql";
 import MY_NOTES from "../graphql/my-notes.gql";
 
@@ -57,6 +60,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["listening"]),
     formValid() {
       return !!this.content;
     }

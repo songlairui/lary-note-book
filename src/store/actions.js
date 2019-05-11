@@ -18,15 +18,19 @@ const actions = {
     })
     commit(T.SIGN_IN, data.signin)
   },
-  subscribeNote() {
-    const observer = this.$apollo.subscribe({
+  subscribeNote({ commit }) {
+    const observer = $apollo.subscribe({
       query: SUB_NOTE
     })
+    commit(T.LISTEN, ['note', true])
     observer.subscribe({
       next: console.info,
       error: console.error
     })
     return observer
+  },
+  clearSign({ commit }) {
+    commit(T.CLEAR_SIGN)
   }
 }
 

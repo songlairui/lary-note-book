@@ -48,7 +48,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["signIn"]),
+    ...mapActions(["signIn", "clearSign"]),
     async mutate() {
       try {
         const data = await this.signIn({ email: this.email, pwd: this.pwd });
@@ -57,7 +57,17 @@ export default {
       }
     },
     handleLoginFail(errObj) {
-      this.$message.error(errObj.gqlError.message.error);
+      if (!errObj.graphQLErrors) {
+        this.$message.error(`${errObj}`);
+        return;
+      }
+      const statusCode = errObj.graphQLErrors[0].message.statusCode;
+      if (statusCode === 403) {
+        this.clearSign();
+      }
+      this.$message.error(
+        errObj.graphQLErrors.map(err => err.message.error).join()
+      );
     }
   }
 };

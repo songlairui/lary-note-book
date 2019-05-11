@@ -10,8 +10,11 @@ const store = {
   state: {
     identity: {
       accessToken: localStorage.getItem(AUTH_TOKEN) || '',
-      expiresIn: localStorage.getItem(`${AUTH_TOKEN}_exp`) || 0,
-      stamp: localStorage.getItem(`${AUTH_TOKEN}_stamp`) || 0
+      expiresIn: +localStorage.getItem(`${AUTH_TOKEN}_exp`) || 1,
+      stamp: +localStorage.getItem(`${AUTH_TOKEN}_stamp`) || 0
+    },
+    listening: {
+      note: false
     }
   },
   mutations: {
@@ -25,10 +28,22 @@ const store = {
       localStorage.setItem(AUTH_TOKEN, accessToken)
       localStorage.setItem(`${AUTH_TOKEN}_exp`, expiresIn)
       localStorage.setItem(`${AUTH_TOKEN}_stamp`, stamp)
+    },
+    [T.LISTEN](state, [type, bool] = []) {
+      if (!type) return
+      Vue.set(state.listening, type, bool)
+    },
+    [T.CLEAR_SIGN](state) {
+      state.identity.accessToken = ''
+      state.identity.expiresIn = 1
+      state.identity.stamp = 0
+      localStorage.setItem(AUTH_TOKEN, '')
+      localStorage.setItem(`${AUTH_TOKEN}_exp`, 1)
+      localStorage.setItem(`${AUTH_TOKEN}_stamp`, 0)
     }
   },
   getters: {
-    checkExpired(state, ...oo) {
+    checkExpired(state) {
       return function() {
         const {
           identity: { expiresIn, stamp }

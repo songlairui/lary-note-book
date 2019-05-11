@@ -12,7 +12,8 @@ import {
   Input,
   Popover,
   Radio,
-  Modal
+  Modal,
+  Divider
 } from 'ant-design-vue'
 
 export default {
@@ -31,7 +32,8 @@ export default {
       Input,
       Popover,
       Radio,
-      Modal
+      Modal,
+      Divider
     ]
     instances.forEach((instance) => {
       Vue.use(instance)
