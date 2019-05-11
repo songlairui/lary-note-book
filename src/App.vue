@@ -1,11 +1,9 @@
 <template>
-  <a-locale-provider :locale="zh_CN">
-    <div id="app">
-      <nav-head></nav-head>
-      <router-view></router-view>
-      <float-actions/>
-    </div>
-  </a-locale-provider>
+  <div id="app">
+    <nav-head></nav-head>
+    <router-view></router-view>
+    <float-actions/>
+  </div>
 </template>
 
 <script>
@@ -44,12 +42,12 @@ body,
   height: 100%;
 }
 #app {
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   > div {
     flex: 1;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 .float-actions {

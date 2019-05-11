@@ -14,6 +14,7 @@ export default {
 </script>
 <style lang="less" scoped>
 nav.nav-head {
+  background: rgba(0, 0, 0, 0.1);
   text-align: center;
   padding: 0.5em;
   > a {

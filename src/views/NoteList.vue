@@ -1,23 +1,21 @@
 <template>
-  <div
-    class="note-list"
-    v-infinite-scroll="showMore"
-    infinite-scroll-disabled="loading"
-    infinite-scroll-distance="10"
-  >
-    <div class="card-blocks">
-      <div class="card-wrapper" v-for="item in source.edges">
-        <a-card :title="item.node.title">{{item.node.content}}</a-card>
+  <div class="page-wrapper">
+    <div
+      class="note-list"
+      v-infinite-scroll="showMore"
+      infinite-scroll-disabled="loading"
+      infinite-scroll-distance="10"
+    >
+      <div class="card-blocks">
+        <div class="card-wrapper" v-for="item in source.edges">
+          <a-card :title="item.node.title">{{item.node.content}}</a-card>
+        </div>
       </div>
-    </div>
-    <div class="actions">
-      <div style="line-height: 4em; text-align: center">
-        <a-icon v-if="source.hasNextPage" type="loading" @click="showMore"/>
+      <div class="actions">
+        <div style="line-height: 4em; text-align: center">
+          <a-icon v-if="source.hasNextPage" type="loading" @click="showMore"/>
+        </div>
       </div>
-      <!-- <button
-        v-if="source.hasNextPage"
-        @click="showMore"
-      >{{ source.total }} Show more {{ source.endCursor }}</button>-->
     </div>
   </div>
 </template>
@@ -27,7 +25,7 @@ import infiniteScroll from "vue-infinite-scroll";
 import MY_NOTES from "../graphql/my-notes.gql";
 
 const initVari = {
-  first: 5,
+  first: 10,
   after: null,
   orderBy: "createdAt_DESC"
 };
@@ -37,9 +35,8 @@ export default {
   directives: { infiniteScroll },
   data() {
     return {
-      first: 5,
+      ...initVari,
       skip: 0,
-      after: null,
       loading: false
     };
   },
@@ -58,7 +55,7 @@ export default {
       return {
         first: this.first,
         after: this.after,
-        orderBy: "createdAt_DESC"
+        orderBy: this.orderBy
       };
     },
     source() {
@@ -118,6 +115,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.page-wrapper {
+  overflow: auto;
+}
+.note-list {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .card-blocks {
   display: flex;
   flex-wrap: wrap;

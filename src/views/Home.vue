@@ -21,6 +21,7 @@ export default {
 .entry {
   max-width: 50vh;
   cursor: pointer;
+  border-radius: 3em;
 }
 </style>
 

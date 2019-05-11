@@ -1,19 +1,37 @@
 <template>
   <div class="login">
-    <form v-on:submit.prevent="formValid && mutate()">
-      <label for="field-email">Email</label>
-      <input id="field-email" v-model="email" placeholder="Type Email" class="input">
-      <label for="field-password">Password</label>
-      <input
-        id="field-password"
-        v-model="pwd"
-        placeholder="Type Password"
-        class="input"
-        type="password"
-      >
-      <input type="submit" value="Login">
-    </form>
-    <hr>
+    <a-form :form="form" @submit="handleSubmit">
+      <a-form-item :validate-status="emailError() ? 'error' : ''" :help="emailError() || ''">
+        <a-input
+          v-decorator="[
+          'email',
+          {rules: [{ required: true, message: 'Please input your email!' }]}
+        ]"
+          placeholder="Email"
+        >
+          <a-icon slot="prefix" type="mail" style="color:rgba(0,0,0,.3)"/>
+        </a-input>
+      </a-form-item>
+      <a-form-item :validate-status="passwordError() ? 'error' : ''" :help="passwordError() || ''">
+        <a-input
+          v-decorator="[
+          'pwd',
+          {rules: [{ required: true, message: 'Please input your Password!' }]}
+        ]"
+          type="pwd"
+          placeholder="Password"
+        >
+          <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.3)"/>
+        </a-input>
+      </a-form-item>
+      <a-form-item>
+        <a-button
+          type="primary"
+          html-type="submit"
+          :disabled="hasErrors(form.getFieldsError())"
+        >Log in</a-button>
+      </a-form-item>
+    </a-form>
     <div class="flex">
       <div class="a">0</div>
       <div class="b">{{ progress }} %</div>
@@ -24,13 +42,25 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import { Form, Input } from "ant-design-vue";
+
+function hasErrors(fieldsError) {
+  return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
 
 export default {
   data() {
     return {
+      hasErrors,
+      form: this.$form.createForm(this),
       email: "",
       pwd: ""
     };
+  },
+  components: {
+    AForm: Form,
+    AInput: Input,
+    AFormItem: Form.Item
   },
   computed: {
     ...mapState(["identity"]),
@@ -49,9 +79,9 @@ export default {
   },
   methods: {
     ...mapActions(["signIn", "clearSign"]),
-    async mutate() {
+    async mutate(payload) {
       try {
-        const data = await this.signIn({ email: this.email, pwd: this.pwd });
+        const data = await this.signIn(payload);
       } catch (error) {
         this.handleLoginFail(error);
       }
@@ -68,6 +98,23 @@ export default {
       this.$message.error(
         errObj.graphQLErrors.map(err => err.message.error).join()
       );
+    }, // Only show error after a field is touched.
+    emailError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched("email") && getFieldError("email");
+    },
+    // Only show error after a field is touched.
+    passwordError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched("pwd") && getFieldError("pwd");
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          this.mutate(values);
+        }
+      });
     }
   }
 };
@@ -75,7 +122,10 @@ export default {
 
 <style lang="less" scoped>
 .login {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em 2em;
   .flex {
     width: 320px;
     > div {

@@ -14,9 +14,33 @@ module.exports = {
     loaderOptions: {
       less: {
         modifyVars: {
-          'primary-color': '#1DA57A',
-          'link-color': '#1DA57A',
-          'border-radius-base': '2px'
+          'primary-color': '#1a423f',
+          'link-color': '#804766',
+          // 'border-radius-base': '2px',
+          // white: '#000',
+          // black: '#fff',
+          // 'body-background': '#000',
+          // 'component-background': '#000',
+          // 'heading-color': 'fade(#fff, 85%)',
+          // 'text-color': 'fade(#fff, 65%)',
+          // 'text-color-secondary': 'fade(#fff, 45%)',
+          // 'heading-color-dark': 'fade(#000, 100%)',
+          // 'text-color-dark': 'fade(#000, 85%)',
+          // 'text-color-secondary-dar': 'fade(#000, 65%)',
+          // 'disabled-color': 'fade(#fff, 25%)',
+          // 'disabled-color-dark': 'fade(#000, 35%)',
+          // 'btn-primary-color': '#000',
+          // 'btn-default-bg': '#000',
+          // 'checkbox-check-color': '#000',
+          // 'layout-trigger-color': '#000',
+          // 'layout-sider-background-light': '#000',
+          // 'layout-trigger-background-light': '#000',
+          // 'input-bg': '#000',
+          // 'popover-bg': '#000',
+          // 'back-top-color': '#000',
+          // 'avatar-color': '#000',
+          // 'tree-directory-selected-color': '#000',
+          // 'skeleton-color': '#2f2f2f'
         },
         javascriptEnabled: true
       }
@@ -74,7 +98,7 @@ module.exports = {
   },
 
   pwa: {
-    name: 'Lary\'s Note',
+    name: "Lary's Note",
     themeColor: '#000000'
   }
 }
