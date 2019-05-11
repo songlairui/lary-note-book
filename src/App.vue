@@ -37,7 +37,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang='less'>
 html,
 body,
 #app {
@@ -47,6 +47,10 @@ body,
 #app {
   display: flex;
   flex-direction: column;
+  > div {
+    flex: 1;
+    overflow: auto;
+  }
 }
 .float-actions {
   position: fixed;

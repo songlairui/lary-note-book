@@ -1,11 +1,14 @@
 <template>
-  <div class="note-list">
+  <div class="note-list" v-infinite-scroll="showMore">
     <div class="card-blocks">
       <div class="card-wrapper" v-for="item in source.edges">
         <a-card :title="item.node.title">{{item.node.content}}</a-card>
       </div>
     </div>
     <div class="actions">
+      <div style="line-height: 4em;">
+        <a-icon v-if="source.hasNextPage" type="loading"/>
+      </div>
       <button
         v-if="source.hasNextPage"
         @click="showMore"
@@ -15,6 +18,7 @@
 </template>
 
 <script>
+import infiniteScroll from "vue-infinite-scroll";
 import MY_NOTES from "../graphql/my-notes.gql";
 
 const initVari = {
@@ -24,6 +28,7 @@ const initVari = {
 
 export default {
   name: "NoteList",
+  directives: { infiniteScroll },
   data() {
     return {
       first: 5,
@@ -99,6 +104,9 @@ export default {
       this.showMoreEnabled = pageInfo.hasNextPage;
     },
     showMore() {
+      if (this.loading) return;
+      if (!this.source.hasNextPage) return;
+      this.loading = true;
       this.after = this.source.endCursor;
       this.$nextTick(() => {
         this.$apollo.queries.notesConnection.fetchMore({
@@ -107,6 +115,7 @@ export default {
             fetchMoreResult.notesConnection.edges.unshift(
               ...prevResult.notesConnection.edges
             );
+            this.loading = false;
             return fetchMoreResult;
           }
         });
@@ -125,6 +134,10 @@ export default {
   .card-wrapper {
     padding: 1em;
     flex: 0 0 23em;
+  }
+  .actions {
+    flex: 1;
+    height: 3em;
   }
 }
 </style>
