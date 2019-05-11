@@ -4,8 +4,8 @@ jobs:
     docker: # use the docker executor type; machine and macos executors are also supported
       - image: circleci/node:10.15.3 # the primary container, where your job's commands are run
     environment:
-      VUE_APP_GRAPHQL_HTTP: https://note.songlairui.cn/graphql
-      VUE_APP_GRAPHQL_WS: wss://note.songlairui.cn/graphql
+      # VUE_APP_GRAPHQL_HTTP: https://note.songlairui.cn/graphql
+      # VUE_APP_GRAPHQL_WS: wss://note.songlairui.cn/graphql
     steps:
       - checkout
       - attach_workspace:
@@ -24,5 +24,5 @@ jobs:
       - run: echo $REMOTE_HOSTKEY >> ~/.ssh/known_hosts
       - run:
           name: trans to $REMOTE_HOSTKEY
-          command: tar czf - -C ./dist . | ssh $REMOTE_HOSTKEY "tar zxf - -C $REMOTE_DIST_PATH" # ~/ary-gateway/note/www
+          command: tar czf - -C ./dist . | ssh ${REMOTE_USER}@$REMOTE_HOSTKEY -p $REMOTE_PORT "tar zxf - -C $REMOTE_DIST_PATH" # ~/ary-gateway/note/www
 

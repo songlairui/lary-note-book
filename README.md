@@ -4,9 +4,8 @@
 
 > lary-note 前端, via @vue/cli
 
-
-## push 
+## push
 
 ```
-tar czf - -C ./dist . | ssh remoteServer "tar zxf - -C ~/ary-gateway/note/www"
+tar czf - -C ./dist . | ssh $USER@$HOST -p $PORT "tar zxf - -C ~/ary-gateway/note/www"
 ```
