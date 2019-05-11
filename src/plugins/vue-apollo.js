@@ -4,7 +4,7 @@ import {
   createApolloClient,
   restartWebsockets
 } from 'vue-cli-plugin-apollo/graphql-client'
-import { AUTH_TOKEN } from './constant'
+import { AUTH_TOKEN } from '../constant'
 // Install the vue plugin
 Vue.use(VueApollo)
 
