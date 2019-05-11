@@ -24,7 +24,20 @@
           <a-button type="primary" @click="createNote">Add</a-button>
         </a-row>
       </a-modal>
-      <a-button type="primary" shape="circle" icon="plus" @click="showModal=!showModal"></a-button>
+      <a-button
+        v-if="isLogin"
+        type="primary"
+        shape="circle"
+        icon="plus"
+        @click="showModal=!showModal"
+      ></a-button>
+      <a-button
+        v-else-if="$route.name !== 'login'"
+        type="primary"
+        shape="circle"
+        icon="login"
+        @click="$router.push({name:'login'})"
+      ></a-button>
     </div>
   </div>
 </template>

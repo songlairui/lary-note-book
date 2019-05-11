@@ -12,7 +12,6 @@
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
 import FloatActions from "./floating/Actions";
 import NavHead from "./components/NavHead";
-import SUB_NOTE from "./graphql/sub-note.gql";
 
 export default {
   name: "app",
@@ -30,13 +29,10 @@ export default {
     addNote() {}
   },
   mounted() {
-    const observer = this.$apollo.subscribe({
-      query: SUB_NOTE
-    });
-    observer.subscribe({
-      next: console.info,
-      error: console.error
-    });
+    if (!this.checkExpired()) {
+      const note$ = this.subscribeNote();
+      console.info(note$, "note$");
+    }
   }
 };
 </script>

@@ -17,7 +17,7 @@
     <div class="flex">
       <div class="a">0</div>
       <div class="b">{{ progress }} %</div>
-      <div class="c" @click="checkExpires">{{ identity.expiresIn }}</div>
+      <div class="c" @click="checkExpired">{{ identity.expiresIn }}</div>
     </div>
   </div>
 </template>
@@ -40,6 +40,7 @@ export default {
     progress() {
       const { expiresIn, stamp } = this.identity;
       const snapStamp = +new Date();
+      if (!expiresIn) return "-";
       return (
         Math.round(Math.min(snapStamp - stamp, expiresIn * 1000) / expiresIn) /
         10

@@ -1,17 +1,10 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data() {
-    return {
-      expired: false
-    }
-  },
   computed: {
-    ...mapGetters(['checkExpired'])
+    ...mapGetters(['checkExpired', 'isLogin'])
   },
   methods: {
-    checkExpires() {
-      this.expired = this.checkExpired()
-    }
+    ...mapActions(['subscribeNote'])
   }
 }
