@@ -24,5 +24,5 @@ jobs:
       - run: echo $REMOTE_HOSTKEY >> ~/.ssh/known_hosts
       - run:
           name: trans to $REMOTE_HOSTKEY
-          command: tar czf - -C ./dist . | ssh ${REMOTE_USER}@$REMOTE_HOSTKEY -p $REMOTE_PORT "tar zxf - -C $REMOTE_DIST_PATH" # ~/ary-gateway/note/www
+          command: tar czf - -C ./dist . | ssh ${REMOTE_USER}@$REMOTE_HOST -p $REMOTE_PORT "tar zxf - -C $REMOTE_DIST_PATH" # ~/ary-gateway/note/www
 
