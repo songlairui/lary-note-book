@@ -17,25 +17,23 @@
     <div class="flex">
       <div class="a">0</div>
       <div class="b">{{ progress }} %</div>
-      <div class="c" @click="check">{{ identity.expiresIn }}</div>
+      <div class="c" @click="checkExpires">{{ identity.expiresIn }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
     return {
       email: "",
-      pwd: "",
-      expired: false
+      pwd: ""
     };
   },
   computed: {
     ...mapState(["identity"]),
-    ...mapGetters(["checkExpired"]),
     formValid() {
       return this.email && this.pwd;
     },
@@ -50,9 +48,6 @@ export default {
   },
   methods: {
     ...mapActions(["signIn"]),
-    check() {
-      this.expired = this.checkExpired();
-    },
     async mutate() {
       try {
         const data = await this.signIn({ email: this.email, pwd: this.pwd });
