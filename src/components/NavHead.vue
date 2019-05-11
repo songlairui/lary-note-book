@@ -15,7 +15,7 @@ export default {
 <style lang="less" scoped>
 nav.nav-head {
   text-align: center;
-  padding-top: 0.5em;
+  padding: 0.5em;
   > a {
     display: inline-block;
     padding: 0.5em 1em;

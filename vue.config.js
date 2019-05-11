@@ -24,7 +24,7 @@ module.exports = {
   },
   chainWebpack: (config) => {
     console.group()
-    console.info('VUE_APP_GRAPHQL_HTTP:', process.env.VUE_APP_GRAPHQL_HTTP)
+    console.info('\nVUE_APP_GRAPHQL_HTTP:', process.env.VUE_APP_GRAPHQL_HTTP)
     if (process.env.NODE_ENV === 'production') {
       console.info('use gzip')
       config
