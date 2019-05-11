@@ -1,18 +1,23 @@
 <template>
-  <div class="note-list" v-infinite-scroll="showMore">
+  <div
+    class="note-list"
+    v-infinite-scroll="showMore"
+    infinite-scroll-disabled="loading"
+    infinite-scroll-distance="10"
+  >
     <div class="card-blocks">
       <div class="card-wrapper" v-for="item in source.edges">
         <a-card :title="item.node.title">{{item.node.content}}</a-card>
       </div>
     </div>
     <div class="actions">
-      <div style="line-height: 4em;">
-        <a-icon v-if="source.hasNextPage" type="loading"/>
+      <div style="line-height: 4em; text-align: center">
+        <a-icon v-if="source.hasNextPage" type="loading" @click="showMore"/>
       </div>
-      <button
+      <!-- <button
         v-if="source.hasNextPage"
         @click="showMore"
-      >{{ source.total }} Show more {{ source.endCursor }}</button>
+      >{{ source.total }} Show more {{ source.endCursor }}</button>-->
     </div>
   </div>
 </template>
@@ -23,7 +28,8 @@ import MY_NOTES from "../graphql/my-notes.gql";
 
 const initVari = {
   first: 5,
-  after: null
+  after: null,
+  orderBy: "createdAt_DESC"
 };
 
 export default {
@@ -33,7 +39,8 @@ export default {
     return {
       first: 5,
       skip: 0,
-      after: null
+      after: null,
+      loading: false
     };
   },
   apollo: {
@@ -50,7 +57,8 @@ export default {
     variables() {
       return {
         first: this.first,
-        after: this.after
+        after: this.after,
+        orderBy: "createdAt_DESC"
       };
     },
     source() {
@@ -88,21 +96,6 @@ export default {
         return;
       }
     },
-    async loadData() {
-      const { data } = await this.$apollo.query({
-        query: MY_NOTES,
-        variables: this.variables
-      });
-      if (!data || !data.notesConnection) {
-        this.$message.error("No Data!");
-        return;
-      }
-      const {
-        notesConnection: { aggregate, edges, pageInfo }
-      } = data;
-      this.noteList.push(...edges);
-      this.showMoreEnabled = pageInfo.hasNextPage;
-    },
     showMore() {
       if (this.loading) return;
       if (!this.source.hasNextPage) return;
@@ -121,9 +114,6 @@ export default {
         });
       });
     }
-  },
-  mounted() {
-    // this.loadData();
   }
 };
 </script>
@@ -136,8 +126,15 @@ export default {
     flex: 0 0 23em;
   }
   .actions {
-    flex: 1;
+    flex: 1 0 100%;
     height: 3em;
+  }
+}
+@media only screen and (max-width: 420px) {
+  .card-blocks {
+    .card-wrapper {
+      flex: 1 0 100%;
+    }
   }
 }
 </style>

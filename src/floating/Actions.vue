@@ -83,7 +83,8 @@ export default {
         update: (store, { data: { createNoteAuto } }) => {
           const variables = {
             first: 5,
-            after: null
+            after: null,
+            orderBy: "createdAt_DESC"
           };
           const data = store.readQuery({
             query: MY_NOTES,
@@ -92,11 +93,7 @@ export default {
           if (!data || !data.notesConnection) {
             return;
           }
-          if (data.notesConnection.pageInfo.hasNextPage) {
-            // 如果还有下一页, 则不需要添加到缓存
-            return;
-          }
-          data.notesConnection.edges.push({
+          data.notesConnection.edges.unshift({
             cursor: createNoteAuto.id,
             node: createNoteAuto,
             __typename: `${createNoteAuto.__typename}Edge`
