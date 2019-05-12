@@ -2,8 +2,13 @@
   <nav class="nav-head">
     <router-link to="/">Home</router-link>
     <router-link to="/about">About</router-link>
-    <router-link to="/login">Login</router-link>
-    <router-link to="/note-list">NoteList</router-link>
+    <template v-if="isLogin">
+      <router-link to="/note-list">NoteList</router-link>
+      <a-icon type="logout" @click="logout"/>
+    </template>
+    <template v-else>
+      <router-link to="/login">Login</router-link>
+    </template>
   </nav>
 </template>
 
