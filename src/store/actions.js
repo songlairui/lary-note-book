@@ -34,8 +34,8 @@ const actions = {
     commit(T.SET_PROFILE, selfProfile)
   },
   async signOff({ commit }) {
-    commit(T.CLEAR_SIGN)
     await onLogout($apollo)
+    commit(T.CLEAR_SIGN)
   },
   subscribeNote({ commit }) {
     const observer = $apollo.subscribe({

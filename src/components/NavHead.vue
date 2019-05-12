@@ -1,27 +1,49 @@
 <template>
   <nav class="nav-head">
-    <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
+    <template v-for="nav of navs">
+      <router-link
+        :to="nav"
+        :class="{active: nav.name === $route.name}"
+        v-if="!nav.meta.hide"
+      >{{ nav.meta.title }}</router-link>
+    </template>
     <template v-if="isLogin">
-      <router-link to="/note-list">NoteList</router-link>
       {{ accountInfo.name }}
       <a-divider type="vertical"></a-divider>
       <a-icon type="logout" @click="logout"/>
     </template>
-    <template v-else>
-      <router-link to="/login">Login</router-link>
-    </template>
+    <template v-else></template>
   </nav>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { routeMeta } from "../router";
+
+function execute(payload) {
+  if (typeof payload === "function") {
+    return payload.call(this);
+  }
+  return !!payload;
+}
+
 export default {
   name: "NavHead",
+
   computed: {
     ...mapState({
       accountInfo: state => state.identity.info
-    })
+    }),
+
+    navs() {
+      return routeMeta.map(nav => ({
+        ...nav,
+        meta: {
+          ...nav.meta,
+          hide: execute.call(this, nav.meta.hide)
+        }
+      }));
+    }
   }
 };
 </script>
@@ -36,6 +58,7 @@ nav.nav-head {
     margin: 0 2px;
     transition: all 0.2s;
     border-radius: 4px;
+    &.active,
     &:hover {
       background: lightcyan;
       color: darkcyan;
