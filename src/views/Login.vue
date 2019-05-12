@@ -26,6 +26,7 @@
       </a-form-item>
       <a-form-item>
         <a-button
+          :loading="loading"
           type="primary"
           html-type="submit"
           :disabled="hasErrors(form.getFieldsError())"
@@ -54,7 +55,8 @@ export default {
       hasErrors,
       form: this.$form.createForm(this),
       email: "",
-      pwd: ""
+      pwd: "",
+      loading: false
     };
   },
   components: {
@@ -80,11 +82,16 @@ export default {
   methods: {
     ...mapActions(["signIn", "clearSign"]),
     async mutate(payload) {
+      this.loading = true;
+      await new Promise(r => setTimeout(r, 234));
       try {
         const data = await this.signIn(payload);
+        const nextName = this.$route.query.r || "home";
+        this.$router.push({ name: nextName });
       } catch (error) {
         this.handleLoginFail(error);
       }
+      this.loading = false;
     },
     handleLoginFail(errObj) {
       if (!errObj.graphQLErrors) {

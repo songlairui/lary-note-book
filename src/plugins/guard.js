@@ -10,7 +10,10 @@ export default {
       if (requiresAuth && !store.getters.checkLogin()) {
         store.commit(T.CLEAR_SIGN)
         next({
-          name: 'login'
+          name: 'login',
+          query: {
+            r: to.name
+          }
         })
       } else {
         next()

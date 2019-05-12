@@ -10,7 +10,13 @@ export default {
     logout() {
       this.$store.commit(T.CLEAR_SIGN)
       if (this.$route.meta.requiresAuth) {
-        this.$router.push('/')
+        const currentRoute = this.$route.name
+        this.$router.push({
+          name: 'login',
+          query: {
+            r: currentRoute
+          }
+        })
       }
     }
   }
