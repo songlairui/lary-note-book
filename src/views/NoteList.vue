@@ -7,9 +7,14 @@
       infinite-scroll-distance="10"
     >
       <div class="card-blocks">
-        <div class="card-wrapper" v-for="item in source.edges">
+        <div class="card-wrapper" v-for="(item, idx) in source.edges">
           <a-card :title="item.node.title">
-            <div class="rendered" v-html="md.render(item.node.content)"></div>
+            <div
+              ref="cardDiv"
+              class="rendered"
+              @input="mdCheck(idx,$event)"
+              v-html="md.render(item.node.content)"
+            ></div>
           </a-card>
         </div>
       </div>
@@ -23,10 +28,11 @@
 </template>
 
 <script>
-import MarkdownIt from "markdown-it";
 import infiniteScroll from "vue-infinite-scroll";
 import MY_NOTES from "../graphql/my-notes.gql";
 import { PAGE_SIZE, initVari } from "../constant";
+import MarkdownIt from "../plugins/markdownIt";
+import { RSA_PKCS1_PADDING } from "constants";
 
 export default {
   name: "NoteList",
@@ -109,7 +115,39 @@ export default {
           }
         });
       });
+    },
+    mdCheck(idx, e) {
+      const el = this.$refs.cardDiv[idx];
+      const content = this.source.edges[idx].node.content;
+      let baseToken = this.md.base.parse(content, {});
+      const checkContent = e.target.nextSibling.data;
+      const checkedValue = e.target.checked;
+      // 不适配 [], [  ] 等空格无效情况, 暂不考虑 在list之外的 [ ]
+      const targetTokens = baseToken.filter(token =>
+        token.content.endsWith(`]${checkContent}`)
+      );
+      if (!targetTokens.length) {
+        return;
+      }
+      let targetIdx = 0;
+      if (targetTokens.length > 1) {
+        // 选项名重复时
+        const nodes = [
+          ...el.querySelectorAll(".task-list-item-checkbox")
+        ].filter(node => node.nextSibling.data === checkContent);
+        targetIdx = nodes.findIndex(node => node === e.target);
+      }
+      // 正则替换  /(\[[\sx]\] check same name)/
+      const regex = new RegExp(`(\\[[\\sx]\\]${checkContent})`);
+      const splited = content.split(regex);
+      const newItemRaw = `[${checkedValue ? "x" : " "}]${checkContent}`;
+      splited[targetIdx * 2 + 1] = newItemRaw;
+      const newRawText = splited.join("");
+      console.info(`result:\n${newRawText}`);
     }
+  },
+  mounted() {
+    console.info("thsi", this);
   }
 };
 </script>
