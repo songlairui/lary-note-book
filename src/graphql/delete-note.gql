@@ -1,0 +1,12 @@
+mutation DeleteNote($where: NoteWhereUniqueInput!) {
+  deleteNote(where: $where) {
+    id
+    title
+    content
+    theme
+    author {
+      id
+      email
+    }
+  }
+}

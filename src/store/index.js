@@ -61,6 +61,9 @@ const store = {
       localStorage.setItem(`${AUTH_TOKEN}_exp`, 1)
       localStorage.setItem(`${AUTH_TOKEN}_stamp`, 0)
       localStorage.setItem(`${AUTH_TOKEN}_info`, '')
+    },
+    [T.DELETE_NOTE](state, payload) {
+      console.info('deleted', payload)
     }
   },
   getters: {

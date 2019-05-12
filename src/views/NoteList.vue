@@ -9,6 +9,21 @@
       <div class="card-blocks">
         <div class="card-wrapper" v-for="(item, idx) in source.edges">
           <a-card :title="item.node.title">
+            <a-dropdown slot="extra">
+              <a class="ant-dropdown-link" href="#">
+                <a-icon type="down"/>
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item>
+                  <span>Edit</span>
+                </a-menu-item>
+                <a-menu-item>
+                  <a-popconfirm title="删了没了!" @confirm="del(item)">
+                    <a href="#">Delete</a>
+                  </a-popconfirm>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
             <div
               ref="cardDiv"
               class="rendered"
@@ -28,6 +43,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import { Dropdown, Menu } from "ant-design-vue";
 import infiniteScroll from "vue-infinite-scroll";
 import MY_NOTES from "../graphql/my-notes.gql";
 import { PAGE_SIZE, initVari } from "../constant";
@@ -67,6 +84,11 @@ function calcData(baseMd, content, $wrap, $check) {
 export default {
   name: "NoteList",
   directives: { infiniteScroll },
+  components: {
+    ADropdown: Dropdown,
+    AMenu: Menu,
+    AMenuItem: Menu.Item
+  },
   data() {
     const md = new MarkdownIt();
     return {
@@ -117,6 +139,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["deleteNote"]),
+    async del(item) {
+      await this.deleteNote({ id: item.node.id });
+    },
     handleResult({ data, error }) {
       if (error) {
         const { error: msg, statusCode } = error.gqlError.message;

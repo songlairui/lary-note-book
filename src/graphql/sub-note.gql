@@ -15,5 +15,10 @@ subscription NewNote {
       }
     }
     updatedFields
+    previousValues {
+      id
+      title
+      content
+    }
   }
 }

@@ -6,12 +6,23 @@ import SIGN_IN from '../graphql/signin.gql'
 import SUB_NOTE from '../graphql/sub-note.gql'
 import MY_NOTES from '../graphql/my-notes.gql'
 import SELF_PROFILE from '../graphql/self-profile.gql'
+import DELETE_NOTE from '../graphql/delete-note.gql'
 
 import { initVari } from '../constant'
 
 const { defaultClient: $apollo } = apolloProvider
 
 const actions = {
+  async deleteNote(state, where) {
+    const { data } = await $apollo.mutate({
+      mutation: DELETE_NOTE,
+      variables: {
+        where
+      }
+    })
+    state.commit(T.DELETE_NOTE, data.deleteNote)
+    return data.deleteNote
+  },
   async signIn({ commit, dispatch }, { email, pwd }) {
     const {
       data: { signin }
@@ -48,17 +59,19 @@ const actions = {
     })
     commit(T.LISTEN, ['note', true])
     observer.subscribe({
-      next: ({ data }) => {
-        const { mutation, node } = data.note
+      next: ({ data: { note } }) => {
+        const { mutation, node, previousValues } = note
+        const variables = initVari
+
+        const data = $apollo.readQuery({
+          query: MY_NOTES,
+          variables
+        })
+        if (!data || !data.notesConnection) {
+          return
+        }
+
         if (mutation === 'CREATED') {
-          const variables = initVari
-          const data = $apollo.readQuery({
-            query: MY_NOTES,
-            variables
-          })
-          if (!data || !data.notesConnection) {
-            return
-          }
           data.notesConnection.edges.unshift({
             cursor: node.id,
             node: node,
@@ -70,6 +83,17 @@ const actions = {
             variables,
             data
           })
+        } else if (mutation === 'DELETED') {
+          const { id } = previousValues
+          const deleteIdx = data.notesConnection.edges.findIndex(
+            (edge) => edge.cursor === id
+          )
+          if (deleteIdx < 0) {
+            return
+          }
+          data.notesConnection.edges = [...data.notesConnection.edges]
+          data.notesConnection.edges.splice(deleteIdx, 1)
+          // TO DO 暂无更新 pageInfo场景
         }
       },
       error: console.error
