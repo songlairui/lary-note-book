@@ -2,6 +2,9 @@ import * as T from './types'
 import apolloProvider from '../plugins/apollo-client'
 import SIGN_IN from '../graphql/signin.gql'
 import SUB_NOTE from '../graphql/sub-note.gql'
+import MY_NOTES from '../graphql/my-notes.gql'
+
+import { initVari } from '../constant'
 
 const { defaultClient: $apollo } = apolloProvider
 
@@ -24,7 +27,30 @@ const actions = {
     })
     commit(T.LISTEN, ['note', true])
     observer.subscribe({
-      next: console.info,
+      next: ({ data }) => {
+        const { mutation, node } = data.note
+        if (mutation === 'CREATED') {
+          const variables = initVari
+          const data = $apollo.readQuery({
+            query: MY_NOTES,
+            variables
+          })
+          if (!data || !data.notesConnection) {
+            return
+          }
+          data.notesConnection.edges.unshift({
+            cursor: node.id,
+            node: node,
+            __typename: `${node.__typename}Edge`
+          })
+          data.notesStatistics.aggregate.count += 1
+          $apollo.writeQuery({
+            query: MY_NOTES,
+            variables,
+            data
+          })
+        }
+      },
       error: console.error
     })
     return observer

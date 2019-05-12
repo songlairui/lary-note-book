@@ -3,7 +3,17 @@ subscription NewNote {
     mutation
     node {
       id
+      title
       content
+      createdAt
+      updatedAt
+      theme
+      author {
+        id
+        email
+        name
+      }
     }
+    updatedFields
   }
 }

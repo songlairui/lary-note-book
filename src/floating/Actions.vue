@@ -78,25 +78,7 @@ export default {
           }
         },
         update: (store, { data: { createNoteAuto } }) => {
-          const variables = initVari;
-          const data = store.readQuery({
-            query: MY_NOTES,
-            variables
-          });
-          if (!data || !data.notesConnection) {
-            return;
-          }
-          data.notesConnection.edges.unshift({
-            cursor: createNoteAuto.id,
-            node: createNoteAuto,
-            __typename: `${createNoteAuto.__typename}Edge`
-          });
-          data.notesStatistics.aggregate.count += 1;
-          store.writeQuery({
-            query: MY_NOTES,
-            variables,
-            data
-          });
+          // update via subscribe
         }
       });
       this.content = "";
