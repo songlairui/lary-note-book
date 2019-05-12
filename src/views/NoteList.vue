@@ -23,12 +23,7 @@
 <script>
 import infiniteScroll from "vue-infinite-scroll";
 import MY_NOTES from "../graphql/my-notes.gql";
-
-const initVari = {
-  first: 10,
-  after: null,
-  orderBy: "createdAt_DESC"
-};
+import { PAGE_SIZE, initVari } from "../constant";
 
 export default {
   name: "NoteList",
@@ -53,9 +48,8 @@ export default {
   computed: {
     variables() {
       return {
-        first: this.first,
-        after: this.after,
-        orderBy: this.orderBy
+        ...initVari,
+        after: this.after
       };
     },
     source() {

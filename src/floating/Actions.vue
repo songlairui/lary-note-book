@@ -42,6 +42,7 @@
 import { mapState } from "vuex";
 import CREATE_MY_NOTE from "../graphql/create-my-note.gql";
 import MY_NOTES from "../graphql/my-notes.gql";
+import { PAGE_SIZE, initVari } from "../constant";
 
 export default {
   name: "Actions",
@@ -77,11 +78,7 @@ export default {
           }
         },
         update: (store, { data: { createNoteAuto } }) => {
-          const variables = {
-            first: 5,
-            after: null,
-            orderBy: "createdAt_DESC"
-          };
+          const variables = initVari;
           const data = store.readQuery({
             query: MY_NOTES,
             variables
