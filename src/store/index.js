@@ -6,24 +6,27 @@ import { AUTH_TOKEN } from '../constant'
 
 Vue.use(Vuex)
 
+const infoStr = localStorage.getItem(`${AUTH_TOKEN}_info`)
+const blankInfo = {
+  id: '',
+  name: '',
+  email: '',
+  profile: {
+    id: '',
+    wechat: null,
+    weibo: null,
+    zhihu: null,
+    juejin: null
+  }
+}
+
 const store = {
   state: {
     identity: {
       accessToken: localStorage.getItem(AUTH_TOKEN) || '',
       expiresIn: +localStorage.getItem(`${AUTH_TOKEN}_exp`) || 1,
       stamp: +localStorage.getItem(`${AUTH_TOKEN}_stamp`) || 0,
-      info: {
-        id: '',
-        name: '',
-        email: '',
-        profile: {
-          id: '',
-          wechat: null,
-          weibo: null,
-          zhihu: null,
-          juejin: null
-        }
-      }
+      info: infoStr ? JSON.parse(infoStr) : blankInfo
     },
     listening: {
       note: false
@@ -42,6 +45,7 @@ const store = {
       localStorage.setItem(`${AUTH_TOKEN}_stamp`, stamp)
     },
     [T.SET_PROFILE](state, payload) {
+      localStorage.setItem(`${AUTH_TOKEN}_info`, JSON.stringify(payload))
       state.identity.info = payload
     },
     [T.LISTEN](state, [type, bool] = []) {
@@ -52,9 +56,11 @@ const store = {
       state.identity.accessToken = ''
       state.identity.expiresIn = 1
       state.identity.stamp = 0
+      state.identity.info = blankInfo
       localStorage.setItem(AUTH_TOKEN, '')
       localStorage.setItem(`${AUTH_TOKEN}_exp`, 1)
       localStorage.setItem(`${AUTH_TOKEN}_stamp`, 0)
+      localStorage.setItem(`${AUTH_TOKEN}_info`, '')
     }
   },
   getters: {

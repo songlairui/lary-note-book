@@ -4,6 +4,8 @@
     <router-link to="/about">About</router-link>
     <template v-if="isLogin">
       <router-link to="/note-list">NoteList</router-link>
+      {{ accountInfo.name }}
+      <a-divider type="vertical"></a-divider>
       <a-icon type="logout" @click="logout"/>
     </template>
     <template v-else>
@@ -13,8 +15,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-  name: "NavHead"
+  name: "NavHead",
+  computed: {
+    ...mapState({
+      accountInfo: state => state.identity.info
+    })
+  }
 };
 </script>
 <style lang="less" scoped>
