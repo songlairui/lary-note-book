@@ -3,7 +3,7 @@ import * as T from '../store/types'
 
 export default {
   computed: {
-    ...mapGetters(['checkExpired', 'isLogin'])
+    ...mapGetters(['checkExpired', 'isLogin', 'checkLogin'])
   },
   methods: {
     ...mapActions(['subscribeNote']),

@@ -86,6 +86,7 @@ export default {
       await new Promise(r => setTimeout(r, 234));
       try {
         const data = await this.signIn(payload);
+        this.$message.success("Login");
         const nextName = this.$route.query.r || "home";
         this.$router.push({ name: nextName });
       } catch (error) {

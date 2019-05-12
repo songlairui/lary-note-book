@@ -1,7 +1,7 @@
 <template>
   <div class="float-actions">
     <div class="btns">
-      <a-modal title="Create Note" v-model="showModal">
+      <a-modal title="Create Note" v-model="visiable.modal">
         <a-row>
           <a-col :span="24">
             <a-input placeholder="Title" v-model="title"/>
@@ -26,13 +26,7 @@
       </a-modal>
       <a-icon type="dash" :spin="listening.note"/>
       <a-divider type="vertical"/>
-      <a-button
-        v-if="isLogin"
-        type="primary"
-        shape="circle"
-        icon="plus"
-        @click="showModal=!showModal"
-      ></a-button>
+      <a-button v-if="isLogin" type="primary" shape="circle" icon="plus" @click="showModal(true)"></a-button>
       <a-button
         v-else-if="$route.name !== 'login'"
         type="primary"
@@ -56,7 +50,9 @@ export default {
       theme: "",
       title: "",
       content: "",
-      showModal: false
+      visiable: {
+        modal: false
+      }
     };
   },
   computed: {
@@ -108,7 +104,14 @@ export default {
       });
       this.content = "";
       this.title = "";
-      this.showModal = false;
+      this.showModal(false);
+    },
+    showModal(bool) {
+      if (bool && !this.checkLogin()) {
+        this.$message.warning("登陆过期");
+        return;
+      }
+      this.visiable.modal = bool;
     }
   }
 };
