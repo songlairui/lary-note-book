@@ -23,6 +23,9 @@ jobs:
             - '93:fe:fa:b1:d0:2c:6c:24:14:11:5a:4f:d5:9c:55:10'
       - run: echo $REMOTE_HOSTKEY >> ~/.ssh/known_hosts
       - run:
+          name: install rsync
+          command: sudo apt install -y rsync
+      - run:
           name: backup yarn.lock
           command: rsync -e "ssh -p ${REMOTE_PORT}" -azP ./yarn.lock ${REMOTE_USER}@${REMOTE_HOST}:/tmp
       - run:
