@@ -8,7 +8,9 @@
     >
       <div class="card-blocks">
         <div class="card-wrapper" v-for="item in source.edges">
-          <a-card :title="item.node.title">{{item.node.content}}</a-card>
+          <a-card :title="item.node.title">
+            <div class="rendered" v-html="md.render(item.node.content)"></div>
+          </a-card>
         </div>
       </div>
       <div class="actions">
@@ -21,6 +23,7 @@
 </template>
 
 <script>
+import MarkdownIt from "markdown-it";
 import infiniteScroll from "vue-infinite-scroll";
 import MY_NOTES from "../graphql/my-notes.gql";
 import { PAGE_SIZE, initVari } from "../constant";
@@ -29,10 +32,12 @@ export default {
   name: "NoteList",
   directives: { infiniteScroll },
   data() {
+    const md = new MarkdownIt();
     return {
       ...initVari,
       skip: 0,
-      loading: false
+      loading: false,
+      md
     };
   },
   apollo: {
