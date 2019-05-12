@@ -42,6 +42,8 @@ body,
 #app {
   display: flex;
   flex-direction: column;
+  background: rgb(255, 253, 247);
+  border-radius: 16px 16px 0 0;
   > div {
     flex: 1;
     overflow: auto;

@@ -16,10 +16,10 @@ module.exports = {
         modifyVars: {
           'primary-color': '#1a423f',
           'link-color': '#804766',
+          'body-background': '#000'
           // 'border-radius-base': '2px',
           // white: '#000',
           // black: '#fff',
-          // 'body-background': '#000',
           // 'component-background': '#000',
           // 'heading-color': 'fade(#fff, 85%)',
           // 'text-color': 'fade(#fff, 65%)',
