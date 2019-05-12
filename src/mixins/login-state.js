@@ -1,5 +1,4 @@
 import { mapGetters, mapActions } from 'vuex'
-import * as T from '../store/types'
 
 export default {
   computed: {
@@ -7,8 +6,9 @@ export default {
   },
   methods: {
     ...mapActions(['subscribeNote', 'signOff']),
-    logout() {
-      this.signOff()
+    async logout() {
+      await this.signOff()
+      this.$message.destroy()
       if (this.$route.meta.requiresAuth) {
         const currentRoute = this.$route.name
         this.$router.push({

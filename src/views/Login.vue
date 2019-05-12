@@ -85,6 +85,7 @@ export default {
       this.loading = true;
       await new Promise(r => setTimeout(r, 234));
       try {
+        this.$message.destroy();
         const data = await this.signIn(payload);
         this.$message.success("Login");
         const nextName = this.$route.query.r || "home";
