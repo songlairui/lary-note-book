@@ -18,7 +18,7 @@
           'pwd',
           {rules: [{ required: true, message: 'Please input your Password!' }]}
         ]"
-          type="pwd"
+          type="password"
           placeholder="Password"
         >
           <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.3)"/>
