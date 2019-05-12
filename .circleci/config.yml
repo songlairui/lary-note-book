@@ -23,6 +23,9 @@ jobs:
             - '93:fe:fa:b1:d0:2c:6c:24:14:11:5a:4f:d5:9c:55:10'
       - run: echo $REMOTE_HOSTKEY >> ~/.ssh/known_hosts
       - run:
+          name: backup yarn.lock
+          command: rsync -e "ssh -p ${REMOTE_PORT}" -azP ./yarn.lock ${REMOTE_USER}@${REMOTE_HOST}:/tmp
+      - run:
           name: trans to $REMOTE_HOSTKEY
           command: rsync -e "ssh -p ${REMOTE_PORT}" -azP ./dist/ ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIST_PATH} # ~/ary-gateway/note/www
           # command: tar czf - -C ./dist . | ssh ${REMOTE_USER}@$REMOTE_HOST -p $REMOTE_PORT "tar zxf - -C $REMOTE_DIST_PATH"
