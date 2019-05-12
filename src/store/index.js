@@ -11,7 +11,19 @@ const store = {
     identity: {
       accessToken: localStorage.getItem(AUTH_TOKEN) || '',
       expiresIn: +localStorage.getItem(`${AUTH_TOKEN}_exp`) || 1,
-      stamp: +localStorage.getItem(`${AUTH_TOKEN}_stamp`) || 0
+      stamp: +localStorage.getItem(`${AUTH_TOKEN}_stamp`) || 0,
+      info: {
+        id: '',
+        name: '',
+        email: '',
+        profile: {
+          id: '',
+          wechat: null,
+          weibo: null,
+          zhihu: null,
+          juejin: null
+        }
+      }
     },
     listening: {
       note: false
@@ -28,6 +40,9 @@ const store = {
       localStorage.setItem(AUTH_TOKEN, accessToken)
       localStorage.setItem(`${AUTH_TOKEN}_exp`, expiresIn)
       localStorage.setItem(`${AUTH_TOKEN}_stamp`, stamp)
+    },
+    [T.SET_PROFILE](state, payload) {
+      state.identity.info = payload
     },
     [T.LISTEN](state, [type, bool] = []) {
       if (!type) return

@@ -6,9 +6,9 @@ export default {
     ...mapGetters(['checkExpired', 'isLogin', 'checkLogin'])
   },
   methods: {
-    ...mapActions(['subscribeNote']),
+    ...mapActions(['subscribeNote', 'signOff']),
     logout() {
-      this.$store.commit(T.CLEAR_SIGN)
+      this.signOff()
       if (this.$route.meta.requiresAuth) {
         const currentRoute = this.$route.name
         this.$router.push({

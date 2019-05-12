@@ -1,8 +1,11 @@
 import * as T from './types'
+import { onLogin, onLogout } from '../plugins/vue-apollo'
+
 import apolloProvider from '../plugins/apollo-client'
 import SIGN_IN from '../graphql/signin.gql'
 import SUB_NOTE from '../graphql/sub-note.gql'
 import MY_NOTES from '../graphql/my-notes.gql'
+import SELF_PROFILE from '../graphql/self-profile.gql'
 
 import { initVari } from '../constant'
 
@@ -10,7 +13,9 @@ const { defaultClient: $apollo } = apolloProvider
 
 const actions = {
   async signIn({ commit }, { email, pwd }) {
-    const { data } = await $apollo.mutate({
+    const {
+      data: { signin }
+    } = await $apollo.mutate({
       mutation: SIGN_IN,
       variables: {
         signinInput: {
@@ -19,7 +24,18 @@ const actions = {
         }
       }
     })
-    commit(T.SIGN_IN, data.signin)
+    commit(T.SIGN_IN, signin)
+    await onLogin($apollo, signin.accessToken)
+    const {
+      data: { selfProfile }
+    } = await $apollo.query({
+      query: SELF_PROFILE
+    })
+    commit(T.SET_PROFILE, selfProfile)
+  },
+  async signOff({ commit }) {
+    commit(T.CLEAR_SIGN)
+    await onLogout($apollo)
   },
   subscribeNote({ commit }) {
     const observer = $apollo.subscribe({

@@ -1,0 +1,14 @@
+query SelfProfile {
+  selfProfile {
+    id
+    name
+    email
+    profile {
+      id
+      wechat
+      weibo
+      zhihu
+      juejin
+    }
+  }
+}
