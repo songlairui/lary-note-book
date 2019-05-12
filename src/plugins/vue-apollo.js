@@ -38,7 +38,7 @@ const defaultOptions = {
   // You need to pass a `wsEndpoint` for this to work
   websocketsOnly: false,
   // Is being rendered on the server?
-  ssr: !!pixS
+  ssr: false // 配错了参数, 这个不是 ssl
 
   // Override default apollo link
   // note: don't override httpLink here, specify httpLink options in the
