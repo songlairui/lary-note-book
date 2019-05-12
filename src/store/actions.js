@@ -12,7 +12,7 @@ import { initVari } from '../constant'
 const { defaultClient: $apollo } = apolloProvider
 
 const actions = {
-  async signIn({ commit }, { email, pwd }) {
+  async signIn({ commit, dispatch }, { email, pwd }) {
     const {
       data: { signin }
     } = await $apollo.mutate({
@@ -32,12 +32,17 @@ const actions = {
       query: SELF_PROFILE
     })
     commit(T.SET_PROFILE, selfProfile)
+    dispatch('subscribeNote')
   },
   async signOff({ commit }) {
     await onLogout($apollo)
     commit(T.CLEAR_SIGN)
   },
-  subscribeNote({ commit }) {
+  subscribeNote({ commit, getters }) {
+    if (!getters.checkLogin()) {
+      console.warn('Do not subscribe without log in')
+      return
+    }
     const observer = $apollo.subscribe({
       query: SUB_NOTE
     })

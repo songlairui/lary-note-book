@@ -27,10 +27,8 @@ export default {
     addNote() {}
   },
   mounted() {
-    if (!this.checkExpired()) {
-      const note$ = this.subscribeNote();
-      console.info(note$, "note$");
-    }
+    const note$ = this.subscribeNote();
+    console.info(note$, "note$");
   }
 };
 </script>
