@@ -34,6 +34,36 @@ import { PAGE_SIZE, initVari } from "../constant";
 import MarkdownIt from "../plugins/markdownIt";
 import { RSA_PKCS1_PADDING } from "constants";
 
+function calcData(baseMd, content, $wrap, $check) {
+  const baseToken = baseMd.parse(content, {});
+  const checkContent = $check.nextSibling.data;
+  const checkedValue = $check.checked;
+  // 不适配 [], [  ] 等空格无效情况, 暂不考虑 在list之外的 [ ]
+  const targetTokens = baseToken.filter(token =>
+    token.content.endsWith(`]${checkContent}`)
+  );
+  if (!targetTokens.length) {
+    return;
+  }
+  let targetIdx = 0;
+  if (targetTokens.length > 1) {
+    // 选项名重复时
+    const nodes = [
+      ...$wrap.querySelectorAll(".task-list-item-checkbox")
+    ].filter(node => node.nextSibling.data === checkContent);
+    targetIdx = nodes.findIndex(node => node === $check);
+  }
+  const targetToken = targetTokens[targetIdx];
+  const lines = content.split("\n");
+  const targetLine = lines.slice(...targetToken.map)[0];
+  const lineReplaced = targetLine.replace(
+    /\[[\sx]\]/,
+    `[${checkedValue ? "x" : " "}]`
+  );
+  lines.splice(targetToken.map[0], 1, lineReplaced);
+  return lines.join("\n");
+}
+
 export default {
   name: "NoteList",
   directives: { infiniteScroll },
@@ -117,33 +147,12 @@ export default {
       });
     },
     mdCheck(idx, e) {
-      const el = this.$refs.cardDiv[idx];
+      const MdWithBase = this.md.base;
       const content = this.source.edges[idx].node.content;
-      let baseToken = this.md.base.parse(content, {});
-      const checkContent = e.target.nextSibling.data;
-      const checkedValue = e.target.checked;
-      // 不适配 [], [  ] 等空格无效情况, 暂不考虑 在list之外的 [ ]
-      const targetTokens = baseToken.filter(token =>
-        token.content.endsWith(`]${checkContent}`)
-      );
-      if (!targetTokens.length) {
-        return;
-      }
-      let targetIdx = 0;
-      if (targetTokens.length > 1) {
-        // 选项名重复时
-        const nodes = [
-          ...el.querySelectorAll(".task-list-item-checkbox")
-        ].filter(node => node.nextSibling.data === checkContent);
-        targetIdx = nodes.findIndex(node => node === e.target);
-      }
-      // 正则替换  /(\[[\sx]\] check same name)/
-      const regex = new RegExp(`(\\[[\\sx]\\]${checkContent})`);
-      const splited = content.split(regex);
-      const newItemRaw = `[${checkedValue ? "x" : " "}]${checkContent}`;
-      splited[targetIdx * 2 + 1] = newItemRaw;
-      const newRawText = splited.join("");
-      console.info(`result:\n${newRawText}`);
+      const $wrap = this.$refs.cardDiv[idx];
+      const $check = e.target;
+      const newData = calcData(MdWithBase, content, $wrap, $check);
+      console.info("newData", newData);
     }
   },
   mounted() {
