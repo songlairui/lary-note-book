@@ -28,6 +28,9 @@ export default new Router({
     {
       path: '/note-list',
       name: 'noteList',
+      meta: {
+        requiresAuth: true
+      },
       component: () =>
         import(/* webpackChunkName: "note-list" */ './views/NoteList.vue')
     }
