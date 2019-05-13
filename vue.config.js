@@ -99,6 +99,7 @@ module.exports = {
 
   pwa: {
     name: "Lary's Note",
-    themeColor: '#000000'
+    themeColor: '#000000',
+    appleMobileWebAppStatusBarStyle: 'black'
   }
 }
